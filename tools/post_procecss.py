@@ -1,8 +1,8 @@
 '''
 Author: William Wang 1309508438@qq.com
 Date: 2023-12-01 14:47:27
-LastEditors: William Wang 1309508438@qq.com
-LastEditTime: 2023-12-01 15:20:54
+LastEditors: liu_0000 1360668195@qq.com
+LastEditTime: 2023-12-02 11:50:04
 FilePath: /plcs-onnx/post_procecss.py
 Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 '''
@@ -54,8 +54,8 @@ class PostProcessing:
 
         locations = _heatmaps.nonzero()
         scores = _heatmaps[locations[...,0],locations[...,1],locations[...,2],locations[...,3]]
-        locations = locations.numpy()
-        scores = scores.numpy()
+        locations = locations.cpu().numpy()
+        scores = scores.cpu().numpy()
         batch_locations = []
         batch_scores = []
         for b in range(B):
