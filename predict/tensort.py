@@ -2,7 +2,7 @@
 Author: William Wang 1309508438@qq.com
 Date: 2023-12-01 11:17:54
 LastEditors: liu_0000 1360668195@qq.com
-LastEditTime: 2023-12-02 12:18:12
+LastEditTime: 2023-12-03 17:27:15
 FilePath: /plcs-onnx/main.py
 Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 '''
@@ -130,9 +130,9 @@ class TensorrtPredict(BasePredict):
         self.__trt_execute(bindings=bindings)
 
         # 预测结果后处理
-        points,scores = self.post(input_tensor,outputs)
-        
-        return points,scores
+        # points,scores = self.post(input_tensor,outputs)
+        outputs = outputs.to(self.device)
+        return outputs
 
 
 if __name__ == "__main__":

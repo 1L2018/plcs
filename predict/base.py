@@ -63,7 +63,7 @@ class BasePredict:
     def batch_predict(self, input_dir: str, save_dir:str, excel_name:str,is_visualize=False):
         wb = Workbook()
         ws = wb.create_sheet("plcs")
-        ws.append(['filename','time_preprocess','time_predict','time_visualize','pred', 'gt','diff','accuracy'])
+        ws.append(['filename','time_preprocess','time_predict','time_postprocess','time_visualize','pred', 'gt','diff','accuracy'])
         
 
         image_list = list(pathlib.Path(input_dir).rglob("*.jpeg"))
@@ -71,8 +71,11 @@ class BasePredict:
             t1 = time()
             inputs,vis = self.preprocess(str(image_path))
             t2 = time()
-            points,scores = self.predict(inputs)
+            outputs = self.predict(inputs)
             t3 = time()
+
+            points,scores = self.post(inputs,outputs)
+            t4 = time()
             gt = int(image_path.parent.name)
             pred = scores[0].shape[0] // self.num_keypoints
             pathlib.Path(save_dir).mkdir(parents=True,exist_ok=True) 
@@ -80,6 +83,6 @@ class BasePredict:
                 save_path = pathlib.Path(save_dir) / image_path.parent.name / image_path.name
                 save_path.parent.mkdir(parents=True,exist_ok=True)
                 self.visualize(vis,str(save_path),points,texts=f"gt:{gt}, pred:{pred}")
-            t4 = time()
-            ws.append([image_path.name,round(t2-t1,3),round(t3-t2,3),round(t4-t3,3),pred,gt,pred-gt,self.calculate_accuracy(gt,pred)])
+            t5 = time()
+            ws.append([image_path.name,round(t2-t1,3),round(t3-t2,3),round(t4-t3,3),round(t5-t4,3),pred,gt,pred-gt,self.calculate_accuracy(gt,pred)])
         wb.save(os.path.join(save_dir ,excel_name))

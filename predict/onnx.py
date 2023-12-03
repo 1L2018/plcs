@@ -43,11 +43,11 @@ class OnnxPredict(BasePredict):
         self.ort_session.run_with_iobinding(self.iobinding)
         # 获取预测结果
         output_data = self.iobinding.copy_outputs_to_cpu()
-        outputs = torch.from_numpy(output_data[0])
+        outputs = torch.from_numpy(output_data[0]).to(self.device)
         # 预测结果后处理
-        points,scores = self.post(inputs,outputs)
+        # points,scores = self.post(inputs,outputs)
         
-        return points,scores
+        return outputs
 
 
 if __name__ == "__main__":
