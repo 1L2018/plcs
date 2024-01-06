@@ -2,7 +2,7 @@
 Author: William Wang 1309508438@qq.com
 Date: 2023-12-01 11:17:54
 LastEditors: liu_0000 1360668195@qq.com
-LastEditTime: 2023-12-02 12:20:04
+LastEditTime: 2023-12-08 09:38:29
 FilePath: /plcs-onnx/main.py
 Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 '''
@@ -14,12 +14,13 @@ from .base import BasePredict
 class OnnxPredict(BasePredict):
     def __init__(
             self,
-            input_size:Tuple[int, int],
-            onnx_path: str ,
+            input_size:Tuple[int, int]=(1024,1024),
+            onnx_path: str =None,
             score_threshold: int = 0.1,
-            device: str = "cpu",
+            device: str = "cuda",
+            num_keypoints = 3,
             ) -> None:
-        super().__init__(onnx_path, input_size, device, score_threshold)
+        super().__init__(model_path=onnx_path, input_size=input_size, device=device, score_threshold=score_threshold,num_keypoints=num_keypoints)
         if self.device == "cpu":
             self.ort_session = ort.InferenceSession(onnx_path, providers=['CPUExecutionProvider'])
         else:

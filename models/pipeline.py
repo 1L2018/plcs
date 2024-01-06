@@ -218,6 +218,11 @@ class TestPipeline:
         vis = img.copy()
         img = self.image_to_tensor(img).unsqueeze(dim=0)
         inputs = self.normalize(img).contiguous().to(self.device)
-
-        return inputs,vis
+        results = dict()
+        results['input_center'] = center
+        results['input_scale'] = scale
+        results['input_size'] = padded_input_size
+        results['inputs'] = inputs
+        results['vis'] = vis
+        return results
 

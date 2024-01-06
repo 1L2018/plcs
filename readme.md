@@ -2,7 +2,7 @@
  * @Author: liu_0000 1360668195@qq.com
  * @Date: 2023-12-01 21:51:16
  * @LastEditors: liu_0000 1360668195@qq.com
- * @LastEditTime: 2023-12-02 12:28:03
+ * @LastEditTime: 2023-12-03 18:17:14
  * @FilePath: /plcs-onnx/readme.md
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -15,3 +15,5 @@
 ```
 + `weights/unquant`中保存的是 **非量化onnx权重**,hrnet_w32, gpu/cpu；
 + 推理代码全部放在predict中，继承自 **BasePredict**；
++ `onnx/tensorrt`推理结束后得到的结果会重新放到GPU中，相比于*cpu后处理*，gpu的处理速度下降了2个量级，从0.03->0.0001,目前处理速度瓶颈主要在预处理部分，后续想办法优化。
++ 预处理阶段耗时：总时长0.08，`cv2.imread()`读取图片时长接近于*0.08*，warpAffine操作仅耗时0.001
